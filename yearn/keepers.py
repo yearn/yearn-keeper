@@ -2,7 +2,7 @@ import time
 from pathlib import Path
 
 import toml
-from brownie import Contract, Wei
+from brownie import Contract, Wei, interface
 from click import secho
 from eth_utils import humanize_seconds
 
@@ -17,7 +17,7 @@ class Keeper3Crv:
         strategy = Contract(self.address)
         self.vote_proxy = Contract(strategy.voter())
         self.gauge = Contract(strategy.gauge())
-        self.curve_pool = Contract(strategy.curve())
+        self.curve_pool = interface.Curve3Pool(strategy.curve())
         fee_max = strategy.FEE_DENOMINATOR()
         self.keep_crv = strategy.keepCRV() / fee_max
         self.performance_fee = strategy.performanceFee() / fee_max
